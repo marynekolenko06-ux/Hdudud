@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Кейс Батл — Дежурные</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: radial-gradient(circle at 50% 0%, #1a1f2e 0%, #0a0d14 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+  }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #f7b733, #fc4a1a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+  .subtitle { color: #8a92a6; margin-bottom: 25px; text-align: center; }
+
+  .roulette-wrap {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    margin-bottom: 25px;
+  }
+  .marker {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid #f7b733;
+    z-index: 5;
+    filter: drop-shadow(0 0 8px #f7b733);
+  }
+  .roulette {
+    display: flex;
+    background: #0d1117;
+    border: 2px solid #2a3040;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 140px;
+    position: relative;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+  }
+  .roulette-inner {
+    display: flex;
+    transition: transform 5s cubic-bezier(0.15, 0.9, 0.25, 1);
+    will-change: transform;
+  }
+  .item {
+    flex: 0 0 140px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #1a1f2e;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.85em;
+    position: relative;
+  }
+  .item .name { font-weight: 600; margin-top: 6px; line-height: 1.2; }
+  .item .avatar {
+    width: 55px; height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #000;
+  }
+  /* Редкости */
+  .rar-common    { background: linear-gradient(180deg, #2a3040, #1a1f2e); }
+  .rar-common .avatar    { background: #b0b6c3; }
+  .rar-common .name      { color: #d0d5e0; }
+
+  .rar-uncommon  { background: linear-gradient(180deg, #1e3a52, #10202e); }
+  .rar-uncommon .avatar  { background: #4d9be6; }
+  .rar-uncommon .name    { color: #7fc1ff; }
+
+  .rar-rare      { background: linear-gradient(180deg, #2b1e52, #1a1030); }
+  .rar-rare .avatar      { background: #8855ff; }
+  .rar-rare .name        { color: #b18aff; }
+
+  .rar-epic      { background: linear-gradient(180deg, #521e46, #2e1028); }
+  .rar-epic .avatar      { background: #e64db8; }
+  .rar-epic .name        { color: #ff8ad9; }
+
+  .rar-legendary { background: linear-gradient(180deg, #5c4218, #2e200a); }
+  .rar-legendary .avatar { background: #f7b733; }
+  .rar-legendary .name   { color: #ffd66b; }
+
+  .controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    padding: 14px 34px;
+    font-size: 1.05em;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  #spinBtn {
+    background: linear-gradient(135deg, #f7b733, #fc4a1a);
+    color: #000;
+    box-shadow: 0 4px 20px rgba(252, 74, 26, 0.4);
+  }
+  #spinBtn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(252, 74, 26, 0.6); }
+  #spinBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  #resetBtn {
+    background: #2a3040;
+    color: #d0d5e0;
+  }
+  #resetBtn:hover { background: #3a4255; }
+
+  .result {
+    margin-top: 30px;
+    min-height: 60px;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .result.show { opacity: 1; }
+  .result .highlight { font-size: 1.5em; }
+
+  .stats {
+    margin-top: 25px;
+    display: flex;
+    gap: 25px;
+    color: #8a92a6;
+    font-size: 0.9em;
+  }
+  .stats div span { color: #f7b733; font-weight: 700; }
+
+  .legend {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 0.8em;
+    color: #8a92a6;
+  }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+</style>
+</head>
+<body>
+
+<h1>🎰 КЕЙС БАТЛ — Дежурные</h1>
+<p class="subtitle">Крути рулетку и узнай, кто сегодня на дежурстве!</p>
+
+<div class="roulette-wrap">
+  <div class="marker"></div>
+  <div class="roulette">
+    <div class="roulette-inner" id="rouletteInner"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button id="spinBtn">🎲 ОТКРЫТЬ КЕЙС</button>
+  <button id="resetBtn">♻️ Сброс</button>
+</div>
+
+<div class="result" id="result"></div>
+
+<div class="stats">
+  <div>Открытий: <span id="statOpens">0</span></div>
+  <div>Легендарок: <span id="statLegend">0</span></div>
+  <div>Удача: <span id="statLuck">0%</span></div>
+</div>
+
+<div class="legend">
+  <span><i style="background:#b0b6c3"></i>Обычный</span>
+  <span><i style="background:#4d9be6"></i>Необычный</span>
+  <span><i style="background:#8855ff"></i>Редкий</span>
+  <span><i style="background:#e64db8"></i>Эпический</span>
+  <span><i style="background:#f7b733"></i>Легендарный</span>
+</div>
+
+<script>
+// ===== Дежурные (замени на свои имена/фамилии) =====
+const PEOPLE = [
+  { name: "Иванов Иван",     rarity: "common",    weight: 40 },
+  { name: "Петров Пётр",     rarity: "common",    weight: 40 },
+  { name: "Сидоров Алексей", rarity: "uncommon",  weight: 25 },
+  { name: "Кузнецов Дмитрий",rarity: "uncommon",  weight: 25 },
+  { name: "Смирнова Анна",   rarity: "rare",      weight: 15 },
+  { name: "Волкова Мария",   rarity: "rare",      weight: 15 },
+  { name: "Морозов Сергей",  rarity: "epic",      weight: 8  },
+  { name: "Николаева Ольга", rarity: "epic",      weight: 8  },
+  { name: "ГЛАВНЫЙ ДЕЖУРНЫЙ",rarity: "legendary", weight: 2  },
+];
+
+const RARITY_LABEL = {
+  common: "Обычный",
+  uncommon: "Необычный",
+  rare: "Редкий",
+  epic: "Эпический",
+  legendary: "ЛЕГЕНДАРНЫЙ"
+};
+
+// ===== Взвешенный рандом =====
+function pickWeighted() {
+  const total = PEOPLE.reduce((s, p) => s + p.weight, 0);
+  let r = Math.random() * total;
+  for (const p of PEOPLE) {
+    if (r < p.weight) return p;
+    r -= p.weight;
+  }
+  return PEOPLE[0];
+}
+
+// ===== Сокращение ФИО для аватара =====
+function initials(name) {
+  if (name === "ГЛАВНЫЙ ДЕЖУРНЫЙ") return "★";
+  const parts = name.split(" ");
+  return (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
+}
+
+// ===== Создание элемента рулетки =====
+function makeItem(person) {
+  const el = document.createElement("div");
+  el.className = `item rar-${person.rarity}`;
+  el.innerHTML = `
+    <div class="avatar">${initials(person.name)}</div>
+    <div class="name">${person.name}</div>
+  `;
+  return el;
+}
+
+// ===== Инициализация ленты =====
+const ITEM_W = 140;
+const CENTER_OFFSET = 4; // сколько элементов слева от маркера
+const inner = document.getElementById("rouletteInner");
+let spinning = false;
+
+function buildStrip(count = 60) {
+  inner.innerHTML = "";
+  inner.style.transition = "none";
+  inner.style.transform = "translateX(0)";
+  for (let i = 0; i < count; i++) {
+    inner.appendChild(makeItem(pickWeighted()));
+  }
+}
+
+// ===== Кручение =====
+const spinBtn  = document.getElementById("spinBtn");
+const resetBtn = document.getElementById("resetBtn");
+const resultEl = document.getElementById("result");
+
+let totalOpens = 0;
+let totalLegend = 0;
+let totalValue = 0;
+
+spinBtn.addEventListener("click", () => {
+  if (spinning) return;
+  spinning = true;
+  spinBtn.disabled = true;
+  resultEl.classList.remove("show");
+  resultEl.innerHTML = "";
+
+  // Выбираем победителя
+  const winner = pickWeighted();
+
+  // Строим новую длинную ленту
+  const STRIP_LEN = 60;
+  buildStrip(STRIP_LEN);
+
+  // Победитель будет в позиции WIN_INDEX
+  const WIN_INDEX = 50;
+  const winnerEl = makeItem(winner);
+  inner.children[WIN_INDEX].replaceWith(winnerEl);
+
+  // Небольшой "дрожащий" сдвиг внутри центра
+  const jitter = (Math.random() - 0.5) * (ITEM_W * 0.6);
+
+  // Конечная позиция: так, чтобы WIN_INDEX оказался под маркером
+  const containerW = inner.parentElement.clientWidth;
+  const targetX = -(WIN_INDEX * ITEM_W) + (containerW / 2) - (ITEM_W / 2) + jitter;
+
+  // Принудительный reflow чтобы transition применился
+  void inner.offsetWidth;
+
+  inner.style.transition = "transform 5.5s cubic-bezier(0.15, 0.9, 0.25, 1)";
+  inner.style.transform = `translateX(${targetX}px)`;
+
+  // Результат
+  setTimeout(() => {
+    spinning = false;
+    spinBtn.disabled = false;
+
+    totalOpens++;
+    if (winner.rarity === "legendary") totalLegend++;
+    totalValue += winner.weight;
+    updateStats();
+
+    const colorMap = {
+      common:    "#b0b6c3",
+      uncommon:  "#4d9be6",
+      rare:      "#8855ff",
+      epic:      "#e64db8",
+      legendary: "#f7b733"
+    };
+    resultEl.innerHTML = `
+      <div style="color:#8a92a6;font-size:0.8em;margin-bottom:5px;">ВЫПАЛ ДЕЖУРНЫЙ · ${RARITY_LABEL[winner.rarity]}</div>
+      <div class="highlight" style="color:${colorMap[winner.rarity]}">${winner.name}</div>
+    `;
+    resultEl.classList.add("show");
+  }, 5600);
+});
+
+resetBtn.addEventListener("click", () => {
+  if (spinning) return;
+  buildStrip(20);
+  resultEl.classList.remove("show");
+  resultEl.innerHTML = "";
+});
+
+function updateStats() {
+  document.getElementById("statOpens").textContent = totalOpens;
+  document.getElementById("statLegend").textContent = totalLegend;
+  const luck = totalOpens === 0 ? 0 : Math.round((totalLegend / totalOpens) * 100);
+  document.getElementById("statLuck").textContent = luck + "%";
+}
+
+// ===== Старт =====
+buildStrip(20);
+</script>
+
+</body>
+</html>
