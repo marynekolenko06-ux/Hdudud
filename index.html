@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Кейс Батл — Дежурные</title>
+<title>КМТ - Дежурные</title>
 <style>
+  :root {
+    --item-w: 120px;
+    --roulette-h: 130px;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -14,12 +18,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 15px;
+    padding: 20px 10px;
     overflow-x: hidden;
     background-image: 
-      radial-gradient(circle at 20% 10%, rgba(247, 183, 51, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 80% 90%, rgba(252, 74, 26, 0.05) 0%, transparent 40%);
-    animation: bgPulse 8s infinite alternate;
+      radial-gradient(circle at 20% 10%, rgba(247, 183, 51, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(252, 74, 26, 0.06) 0%, transparent 40%);
+    animation: bgPulse 10s infinite alternate;
   }
   @keyframes bgPulse {
     0% { background-color: #0a0d14; }
@@ -37,28 +41,69 @@
   }
   @keyframes titleGlow {
     0% { filter: drop-shadow(0 0 2px rgba(247, 183, 51, 0.3)); }
-    100% { filter: drop-shadow(0 0 10px rgba(252, 74, 26, 0.8)); }
+    100% { filter: drop-shadow(0 0 12px rgba(252, 74, 26, 0.8)); }
   }
   .subtitle { color: #8a92a6; margin-bottom: 20px; text-align: center; font-size: 0.9em; }
+
+  /* ===== АРЕНА БАТТЛА ===== */
+  .battle-arena {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 20px;
+  }
+  .player-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 0; /* Важно для flex */
+  }
+  .player-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #8a92a6;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .vs-badge {
+    font-size: 1.5em;
+    font-weight: 900;
+    color: #f7b733;
+    text-shadow: 0 0 15px #f7b733, 0 0 30px #fc4a1a;
+    background: rgba(247, 183, 51, 0.1);
+    padding: 8px 14px;
+    border-radius: 50%;
+    border: 2px solid #f7b733;
+    animation: vsPulse 1.5s infinite alternate;
+    z-index: 10;
+  }
+  @keyframes vsPulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(247, 183, 51, 0.4); }
+    100% { transform: scale(1.1); box-shadow: 0 0 25px rgba(247, 183, 51, 0.8); }
+  }
 
   /* ===== РУЛЕТКА ===== */
   .roulette-wrap {
     width: 100%;
-    max-width: 900px;
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
   .marker {
     position: absolute;
-    top: -10px;
+    top: -8px;
     left: 50%;
     transform: translateX(-50%);
     width: 0; height: 0;
-    border-left: 14px solid transparent;
-    border-right: 14px solid transparent;
-    border-top: 24px solid #f7b733;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 20px solid #f7b733;
     z-index: 10;
-    filter: drop-shadow(0 0 10px #f7b733);
+    filter: drop-shadow(0 0 8px #f7b733);
     transition: transform 0.2s;
   }
   .marker.pulse {
@@ -66,59 +111,57 @@
   }
   @keyframes markerPulse {
     0% { transform: translateX(-50%) scale(1); filter: drop-shadow(0 0 5px #f7b733); }
-    100% { transform: translateX(-50%) scale(1.2); filter: drop-shadow(0 0 20px #fc4a1a); }
+    100% { transform: translateX(-50%) scale(1.3); filter: drop-shadow(0 0 20px #fc4a1a); }
   }
   .roulette {
     display: flex;
     background: #0d1117;
     border: 2px solid #2a3040;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    height: 140px;
+    height: var(--roulette-h);
     position: relative;
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.5);
-    transition: border-color 0.3s;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 0 15px rgba(0,0,0,0.5);
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
   .roulette.spinning {
     border-color: #f7b733;
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 30px rgba(247, 183, 51, 0.3);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 0 25px rgba(247, 183, 51, 0.4);
   }
   .roulette-inner {
     display: flex;
-    transition: transform 5.5s cubic-bezier(0.15, 0.9, 0.25, 1);
+    transition: transform 5.5s cubic-bezier(0.1, 0.85, 0.2, 1);
     will-change: transform;
   }
   .item {
-    flex: 0 0 140px;
-    height: 140px;
+    flex: 0 0 var(--item-w);
+    height: var(--roulette-h);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border-right: 1px solid #1a1f2e;
-    padding: 8px;
+    padding: 6px;
     text-align: center;
-    font-size: 0.85em;
+    font-size: 0.75em;
     position: relative;
-    transition: transform 0.3s, box-shadow 0.3s;
   }
-  .item .name { font-weight: 600; margin-top: 6px; line-height: 1.2; z-index: 2; }
+  .item .name { font-weight: 600; margin-top: 5px; line-height: 1.1; z-index: 2; }
   .item .avatar {
-    width: 55px; height: 55px;
+    width: 45px; height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: 700;
     color: #000;
     z-index: 2;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
   .item.winner {
     transform: scale(1.05);
     z-index: 5;
-    box-shadow: 0 0 20px currentColor;
   }
 
   /* Редкости */
@@ -142,15 +185,53 @@
   .rar-legendary .avatar { background: #f7b733; }
   .rar-legendary .name   { color: #ffd66b; }
 
+  /* ===== РЕЗУЛЬТАТЫ ===== */
+  .result-box {
+    min-height: 50px;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+  }
+  .result-box.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  .result-box .highlight {
+    font-size: 1.2em;
+    font-weight: 800;
+    display: block;
+    text-shadow: 0 0 15px currentColor;
+  }
+  .result-box .rarity-label {
+    font-size: 0.7em;
+    color: #8a92a6;
+    margin-bottom: 2px;
+  }
+
+  /* Победитель / Проигравший */
+  .result-box.winning {
+    animation: winGlow 0.8s infinite alternate;
+  }
+  @keyframes winGlow {
+    0% { filter: drop-shadow(0 0 5px #f7b733); }
+    100% { filter: drop-shadow(0 0 20px #f7b733); }
+  }
+  .result-box.losing {
+    opacity: 0.4;
+    filter: grayscale(0.6);
+  }
+
   /* ===== КНОПКИ ===== */
   .controls {
     display: flex;
     gap: 15px;
-    margin-top: 15px;
+    margin-top: 10px;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    max-width: 900px;
+    max-width: 600px;
   }
   button {
     padding: 16px 34px;
@@ -178,9 +259,7 @@
     transform: scale(1) translate(-50%, -50%);
     transform-origin: 50% 50%;
   }
-  button:active::after {
-    animation: ripple 0.6s ease-out;
-  }
+  button:active::after { animation: ripple 0.6s ease-out; }
   @keyframes ripple {
     0% { transform: scale(0) translate(-50%, -50%); opacity: 1; }
     100% { transform: scale(20) translate(-50%, -50%); opacity: 0; }
@@ -200,27 +279,20 @@
   }
   #resetBtn:hover { background: #3a4255; }
 
-  /* ===== РЕЗУЛЬТАТ ===== */
-  .result {
-    margin-top: 25px;
-    min-height: 80px;
+  /* ===== БАТТЛ РЕЗУЛЬТАТ ===== */
+  .battle-result {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: 800;
     text-align: center;
     opacity: 0;
-    transform: scale(0.8) translateY(20px);
-    transition: opacity 0.5s, transform 0.5s;
-    width: 100%;
-    max-width: 500px;
+    transform: scale(0.5);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height: 50px;
   }
-  .result.show {
+  .battle-result.show {
     opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  .result .highlight {
-    font-size: 1.6em;
-    font-weight: 800;
-    display: block;
-    margin-top: 5px;
-    text-shadow: 0 0 15px currentColor;
+    transform: scale(1);
   }
 
   /* ===== СТАТИСТИКА ===== */
@@ -229,7 +301,7 @@
     display: flex;
     gap: 20px;
     color: #8a92a6;
-    font-size: 0.9em;
+    font-size: 0.85em;
     flex-wrap: wrap;
     justify-content: center;
     background: rgba(42, 48, 64, 0.5);
@@ -276,51 +348,76 @@
   }
 
   /* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
-  @media (max-width: 600px) {
-    body { padding: 15px 10px; }
-    h1 { font-size: 1.5em; }
-    .roulette { height: 110px; }
-    .roulette-inner { height: 110px; }
-    .item {
-      flex: 0 0 110px;
-      height: 110px;
-      font-size: 0.75em;
-      padding: 5px;
+  @media (max-width: 768px) {
+    :root {
+      --item-w: 100px;
+      --roulette-h: 110px;
     }
-    .item .avatar { width: 42px; height: 42px; font-size: 1.1em; }
-    .item .name { margin-top: 4px; }
-    .marker { border-left-width: 10px; border-right-width: 10px; border-top-width: 18px; }
+    h1 { font-size: 1.5em; }
+    .battle-arena {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .player-side { width: 100%; }
+    .vs-badge { margin: 5px 0; font-size: 1.2em; }
+    .item { font-size: 0.65em; padding: 4px; }
+    .item .avatar { width: 36px; height: 36px; font-size: 1em; }
+    .marker { border-left-width: 10px; border-right-width: 10px; border-top-width: 16px; top: -6px; }
     button { padding: 14px 20px; font-size: 0.9em; width: 100%; flex: none; }
     .controls { flex-direction: column; gap: 10px; }
-    .result .highlight { font-size: 1.3em; }
-    .stats { gap: 12px; font-size: 0.8em; padding: 10px 15px; }
-    .legend { gap: 8px; font-size: 0.7em; }
+    .result-box .highlight { font-size: 1.1em; }
+    .battle-result { font-size: 1.2em; }
+    .stats { gap: 12px; font-size: 0.75em; padding: 10px 15px; }
+    .legend { gap: 8px; font-size: 0.65em; }
   }
 </style>
 </head>
 <body>
 
-<h1>🎰 КЕЙС БАТЛ — Дежурные</h1>
-<p class="subtitle">Крути рулетку и узнай, кто сегодня на дежурстве!</p>
+<h1>🎰 КМТ - Дежурные</h1>
+<p class="subtitle">Баттл на двоих! Крути рулетку и узнай, кто вытянет более редкого дежурного</p>
 
-<div class="roulette-wrap">
-  <div class="marker" id="marker"></div>
-  <div class="roulette" id="rouletteContainer">
-    <div class="roulette-inner" id="rouletteInner"></div>
+<div class="battle-arena">
+  <!-- ИГРОК 1 -->
+  <div class="player-side">
+    <div class="player-title">Игрок 1</div>
+    <div class="roulette-wrap">
+      <div class="marker" id="marker1"></div>
+      <div class="roulette" id="roulette1">
+        <div class="roulette-inner" id="inner1"></div>
+      </div>
+    </div>
+    <div class="result-box" id="result1"></div>
+  </div>
+
+  <!-- VS -->
+  <div class="vs-badge">VS</div>
+
+  <!-- ИГРОК 2 -->
+  <div class="player-side">
+    <div class="player-title">Игрок 2</div>
+    <div class="roulette-wrap">
+      <div class="marker" id="marker2"></div>
+      <div class="roulette" id="roulette2">
+        <div class="roulette-inner" id="inner2"></div>
+      </div>
+    </div>
+    <div class="result-box" id="result2"></div>
   </div>
 </div>
 
+<div class="battle-result" id="battleResult"></div>
+
 <div class="controls">
-  <button id="spinBtn">🎲 ОТКРЫТЬ КЕЙС</button>
+  <button id="spinBtn">🎲 ОТКРЫТЬ ОБА КЕЙСА</button>
   <button id="resetBtn">♻️ Сброс</button>
 </div>
-
-<div class="result" id="result"></div>
 
 <div class="stats">
   <div>Открытий: <span id="statOpens">0</span></div>
   <div>Легендарок: <span id="statLegend">0</span></div>
-  <div>Удача: <span id="statLuck">0%</span></div>
+  <div>Побед Игрока 1: <span id="statW1">0</span></div>
+  <div>Побед Игрока 2: <span id="statW2">0</span></div>
 </div>
 
 <div class="legend">
@@ -336,15 +433,15 @@
 <script>
 // ===== ДАННЫЕ =====
 const PEOPLE = [
-  { name: "Иванов Иван",     rarity: "common",    weight: 40 },
-  { name: "Петров Пётр",     rarity: "common",    weight: 40 },
-  { name: "Сидоров Алексей", rarity: "uncommon",  weight: 25 },
-  { name: "Кузнецов Дмитрий",rarity: "uncommon",  weight: 25 },
-  { name: "Смирнова Анна",   rarity: "rare",      weight: 15 },
-  { name: "Волкова Мария",   rarity: "rare",      weight: 15 },
-  { name: "Морозов Сергей",  rarity: "epic",      weight: 8  },
-  { name: "Николаева Ольга", rarity: "epic",      weight: 8  },
-  { name: "ГЛАВНЫЙ ДЕЖУРНЫЙ",rarity: "legendary", weight: 2  },
+  { name: "Иванов Иван",     rarity: "common",    weight: 40, value: 1 },
+  { name: "Петров Пётр",     rarity: "common",    weight: 40, value: 1 },
+  { name: "Сидоров Алексей", rarity: "uncommon",  weight: 25, value: 2 },
+  { name: "Кузнецов Дмитрий",rarity: "uncommon",  weight: 25, value: 2 },
+  { name: "Смирнова Анна",   rarity: "rare",      weight: 15, value: 3 },
+  { name: "Волкова Мария",   rarity: "rare",      weight: 15, value: 3 },
+  { name: "Морозов Сергей",  rarity: "epic",      weight: 8,  value: 4 },
+  { name: "Николаева Ольга", rarity: "epic",      weight: 8,  value: 4 },
+  { name: "ГЛАВНЫЙ ДЕЖУРНЫЙ",rarity: "legendary", weight: 2,  value: 5 },
 ];
 
 const RARITY_LABEL = {
@@ -380,11 +477,10 @@ function initials(name) {
   return (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
 }
 
-// ===== СОЗДАНИЕ ЭЛЕМЕНТА =====
 function makeItem(person) {
   const el = document.createElement("div");
   el.className = `item rar-${person.rarity}`;
-  el.style.color = COLOR_MAP[person.rarity]; // для свечения
+  el.style.color = COLOR_MAP[person.rarity];
   el.innerHTML = `
     <div class="avatar">${initials(person.name)}</div>
     <div class="name">${person.name}</div>
@@ -393,33 +489,35 @@ function makeItem(person) {
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
-const ITEM_W_MOBILE = 110;
-const ITEM_W_DESKTOP = 140;
-let ITEM_W = window.innerWidth <= 600 ? ITEM_W_MOBILE : ITEM_W_DESKTOP;
-
-const inner = document.getElementById("rouletteInner");
-const rouletteContainer = document.getElementById("rouletteContainer");
-const marker = document.getElementById("marker");
+const inner1 = document.getElementById("inner1");
+const inner2 = document.getElementById("inner2");
+const roulette1 = document.getElementById("roulette1");
+const roulette2 = document.getElementById("roulette2");
+const marker1 = document.getElementById("marker1");
+const marker2 = document.getElementById("marker2");
 const spinBtn = document.getElementById("spinBtn");
 const resetBtn = document.getElementById("resetBtn");
-const resultEl = document.getElementById("result");
+const result1 = document.getElementById("result1");
+const result2 = document.getElementById("result2");
+const battleResult = document.getElementById("battleResult");
 const flashOverlay = document.getElementById("flashOverlay");
 
 let spinning = false;
 let totalOpens = 0;
 let totalLegend = 0;
+let wins1 = 0;
+let wins2 = 0;
 
 function getItemWidth() {
-  return window.innerWidth <= 600 ? ITEM_W_MOBILE : ITEM_W_DESKTOP;
+  return window.innerWidth <= 768 ? 100 : 120;
 }
 
-function buildStrip(count = 60) {
-  inner.innerHTML = "";
-  inner.style.transition = "none";
-  inner.style.transform = "translateX(0)";
-  ITEM_W = getItemWidth();
+function buildStrip(innerEl, count = 60) {
+  innerEl.innerHTML = "";
+  innerEl.style.transition = "none";
+  innerEl.style.transform = "translateX(0)";
   for (let i = 0; i < count; i++) {
-    inner.appendChild(makeItem(pickWeighted()));
+    innerEl.appendChild(makeItem(pickWeighted()));
   }
 }
 
@@ -455,79 +553,151 @@ spinBtn.addEventListener("click", () => {
   if (spinning) return;
   spinning = true;
   spinBtn.disabled = true;
-  resultEl.classList.remove("show");
-  resultEl.innerHTML = "";
-  marker.classList.add("pulse");
-  rouletteContainer.classList.add("spinning");
+  
+  // Сброс визуала
+  result1.classList.remove("show", "winning", "losing");
+  result2.classList.remove("show", "winning", "losing");
+  battleResult.classList.remove("show");
+  result1.innerHTML = "";
+  result2.innerHTML = "";
+  battleResult.innerHTML = "";
+  marker1.classList.add("pulse");
+  marker2.classList.add("pulse");
+  roulette1.classList.add("spinning");
+  roulette2.classList.add("spinning");
 
-  const winner = pickWeighted();
+  // Выбор победителей
+  const winner1 = pickWeighted();
+  const winner2 = pickWeighted();
+
   const STRIP_LEN = 60;
-  buildStrip(STRIP_LEN);
+  buildStrip(inner1, STRIP_LEN);
+  buildStrip(inner2, STRIP_LEN);
 
   const WIN_INDEX = 50;
-  const winnerEl = makeItem(winner);
-  winnerEl.classList.add("winner");
-  inner.children[WIN_INDEX].replaceWith(winnerEl);
+  
+  // Замена элементов на победителей
+  const el1 = makeItem(winner1);
+  el1.classList.add("winner");
+  inner1.children[WIN_INDEX].replaceWith(el1);
 
-  const jitter = (Math.random() - 0.5) * (ITEM_W * 0.5);
-  const containerW = inner.parentElement.clientWidth;
-  const targetX = -(WIN_INDEX * ITEM_W) + (containerW / 2) - (ITEM_W / 2) + jitter;
+  const el2 = makeItem(winner2);
+  el2.classList.add("winner");
+  inner2.children[WIN_INDEX].replaceWith(el2);
 
-  void inner.offsetWidth;
+  const itemW = getItemWidth();
 
-  inner.style.transition = "transform 5.5s cubic-bezier(0.1, 0.85, 0.2, 1)";
-  inner.style.transform = `translateX(${targetX}px)`;
+  // Расчет позиций для каждого
+  function calcTarget(innerEl) {
+    const containerW = innerEl.parentElement.clientWidth;
+    const jitter = (Math.random() - 0.5) * (itemW * 0.5);
+    return -(WIN_INDEX * itemW) + (containerW / 2) - (itemW / 2) + jitter;
+  }
 
-  // Завершение
+  void inner1.offsetWidth;
+  void inner2.offsetWidth;
+
+  inner1.style.transition = "transform 5.5s cubic-bezier(0.1, 0.85, 0.2, 1)";
+  inner1.style.transform = `translateX(${calcTarget(inner1)}px)`;
+
+  inner2.style.transition = "transform 5.5s cubic-bezier(0.1, 0.85, 0.2, 1)";
+  inner2.style.transform = `translateX(${calcTarget(inner2)}px)`;
+
+  // Завершение анимации
   setTimeout(() => {
     spinning = false;
     spinBtn.disabled = false;
-    marker.classList.remove("pulse");
-    rouletteContainer.classList.remove("spinning");
+    marker1.classList.remove("pulse");
+    marker2.classList.remove("pulse");
+    roulette1.classList.remove("spinning");
+    roulette2.classList.remove("spinning");
 
     totalOpens++;
-    if (winner.rarity === "legendary") totalLegend++;
+    if (winner1.rarity === "legendary" || winner2.rarity === "legendary") {
+      totalLegend++;
+    }
+
+    // Определение победителя
+    let battleText = "";
+    let isDraw = false;
+
+    if (winner1.value > winner2.value) {
+      wins1++;
+      battleText = "🏆 ПОБЕДА ИГРОКА 1!";
+      result1.classList.add("winning");
+      result2.classList.add("losing");
+    } else if (winner2.value > winner1.value) {
+      wins2++;
+      battleText = "🏆 ПОБЕДА ИГРОКА 2!";
+      result2.classList.add("winning");
+      result1.classList.add("losing");
+    } else {
+      isDraw = true;
+      battleText = "🤝 НИЧЬЯ!";
+      result1.classList.add("winning");
+      result2.classList.add("winning");
+    }
+
     updateStats();
 
-    if (winner.rarity === "legendary") {
+    // Конфетти и вспышки
+    if (winner1.rarity === "legendary" || winner2.rarity === "legendary") {
       triggerFlash();
       createConfetti(true);
     } else {
       createConfetti(false);
     }
 
-    resultEl.innerHTML = `
-      <div style="color:#8a92a6;font-size:0.8em;margin-bottom:5px;">ВЫПАЛ ДЕЖУРНЫЙ · ${RARITY_LABEL[winner.rarity]}</div>
-      <div class="highlight" style="color:${COLOR_MAP[winner.rarity]}">${winner.name}</div>
+    // Отображение результатов
+    result1.innerHTML = `
+      <div class="rarity-label">${RARITY_LABEL[winner1.rarity]}</div>
+      <div class="highlight" style="color:${COLOR_MAP[winner1.rarity]}">${winner1.name}</div>
     `;
-    resultEl.classList.add("show");
+    result1.classList.add("show");
+
+    result2.innerHTML = `
+      <div class="rarity-label">${RARITY_LABEL[winner2.rarity]}</div>
+      <div class="highlight" style="color:${COLOR_MAP[winner2.rarity]}">${winner2.name}</div>
+    `;
+    result2.classList.add("show");
+
+    battleResult.textContent = battleText;
+    battleResult.style.color = isDraw ? "#8a92a6" : "#f7b733";
+    battleResult.classList.add("show");
+
   }, 5600);
 });
 
 resetBtn.addEventListener("click", () => {
   if (spinning) return;
-  buildStrip(20);
-  resultEl.classList.remove("show");
-  resultEl.innerHTML = "";
+  buildStrip(inner1, 20);
+  buildStrip(inner2, 20);
+  result1.classList.remove("show", "winning", "losing");
+  result2.classList.remove("show", "winning", "losing");
+  battleResult.classList.remove("show");
+  result1.innerHTML = "";
+  result2.innerHTML = "";
+  battleResult.innerHTML = "";
 });
 
 function updateStats() {
   document.getElementById("statOpens").textContent = totalOpens;
   document.getElementById("statLegend").textContent = totalLegend;
-  const luck = totalOpens === 0 ? 0 : Math.round((totalLegend / totalOpens) * 100);
-  document.getElementById("statLuck").textContent = luck + "%";
+  document.getElementById("statW1").textContent = wins1;
+  document.getElementById("statW2").textContent = wins2;
 }
 
 // Пересчет при повороте экрана
 window.addEventListener("resize", () => {
   if (!spinning) {
-    ITEM_W = getItemWidth();
-    buildStrip(20);
+    buildStrip(inner1, 20);
+    buildStrip(inner2, 20);
   }
 });
 
 // Старт
-buildStrip(20);
+buildStrip(inner1, 20);
+buildStrip(inner2, 20);
 </script>
 
 </body>
