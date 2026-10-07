@@ -11,7 +11,6 @@
     --gold: #f0b90b;
     --gold-dark: #b8860b;
     --blue: #1e6fff;
-    --blue-dark: #0d3fa8;
     --bg-dark: #0b1220;
     --bg-card: #131b2e;
     --border: #24304a;
@@ -46,11 +45,7 @@
   }
   body > * { position: relative; z-index: 1; }
 
-  /* ===== ЗАГОЛОВОК ===== */
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+  .header { text-align: center; margin-bottom: 20px; }
   h1 {
     font-family: Georgia, serif;
     font-size: 2em;
@@ -84,7 +79,6 @@
     width: 110px;
     height: 110px;
     position: relative;
-    cursor: pointer;
     transition: transform 0.3s;
   }
   .case-body {
@@ -95,15 +89,14 @@
     background: linear-gradient(180deg, #2a3550 0%, #1a2338 100%);
     border: 2px solid var(--gold-dark);
     border-radius: 6px;
-    box-shadow: 
+    box-shadow:
       inset 0 -8px 20px rgba(0,0,0,0.6),
       0 0 20px rgba(240, 185, 11, 0.3);
   }
   .case-body::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 30px; height: 30px;
     background: radial-gradient(circle, #f0b90b 0%, #b8860b 100%);
@@ -113,8 +106,7 @@
   .case-body::after {
     content: '🔒';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     font-size: 14px;
     z-index: 2;
@@ -136,14 +128,6 @@
     transform: translateY(-80px) rotateX(-120deg);
     opacity: 0;
   }
-  .case.opening .case-body {
-    animation: caseBurst 0.6s 0.3s forwards;
-  }
-  @keyframes caseBurst {
-    0% { box-shadow: inset 0 -8px 20px rgba(0,0,0,0.6), 0 0 20px rgba(240, 185, 11, 0.3); }
-    50% { box-shadow: inset 0 -8px 20px rgba(0,0,0,0.6), 0 0 60px rgba(240, 185, 11, 1); }
-    100% { box-shadow: inset 0 -8px 20px rgba(0,0,0,0.6), 0 0 30px rgba(240, 185, 11, 0.6); }
-  }
   .case.shaking { animation: shake 0.15s infinite; }
   @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -152,12 +136,9 @@
     75% { transform: translate(2px, 1px) rotate(0deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
-
-  /* Свет из открытого кейса */
   .case-light {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 0; height: 0;
     background: radial-gradient(circle, #fff 0%, #f0b90b 30%, transparent 70%);
@@ -175,7 +156,7 @@
     100% { width: 400px; height: 400px; opacity: 0; }
   }
 
-  /* ===== АРЕНА БАТТЛА ===== */
+  /* ===== АРЕНА ===== */
   .battle-arena {
     display: flex;
     align-items: stretch;
@@ -187,11 +168,11 @@
     opacity: 0;
     max-height: 0;
     overflow: hidden;
-    transition: opacity 0.5s, max-height 0.6s;
+    transition: opacity 0.5s, max-height 0.8s;
   }
   .battle-arena.active {
     opacity: 1;
-    max-height: 800px;
+    max-height: 1000px;
   }
   .player-side {
     flex: 1;
@@ -215,7 +196,6 @@
     border-radius: 20px;
     background: linear-gradient(180deg, #2a3550, #1a2338);
     border: 1px solid var(--border);
-    color: #8ba3d0;
   }
   .player-title.p1 { color: #4d9be6; border-color: #1e6fff; }
   .player-title.p2 { color: #f0b90b; border-color: #b8860b; }
@@ -315,20 +295,15 @@
   }
   .item.winner { z-index: 5; }
 
-  /* Редкости */
-  .rar-common { color: #8a99b8; background: linear-gradient(180deg, #1a2338 0%, #0d1522 100%); }
+  .rar-common { color: #8a99b8; }
   .rar-common .avatar { background: linear-gradient(180deg, #b0b6c3, #8a91a0); }
-
-  .rar-uncommon { color: #4d9be6; background: linear-gradient(180deg, #122b45 0%, #0a1a2c 100%); }
+  .rar-uncommon { color: #4d9be6; }
   .rar-uncommon .avatar { background: linear-gradient(180deg, #6bb5ff, #4d9be6); }
-
-  .rar-rare { color: #8855ff; background: linear-gradient(180deg, #221440 0%, #120a24 100%); }
+  .rar-rare { color: #8855ff; }
   .rar-rare .avatar { background: linear-gradient(180deg, #a578ff, #8855ff); }
-
-  .rar-epic { color: #e64db8; background: linear-gradient(180deg, #3d1230 0%, #21091a 100%); }
+  .rar-epic { color: #e64db8; }
   .rar-epic .avatar { background: linear-gradient(180deg, #ff7acc, #e64db8); }
-
-  .rar-legendary { color: #f0b90b; background: linear-gradient(180deg, #4a3510 0%, #241808 100%); }
+  .rar-legendary { color: #f0b90b; }
   .rar-legendary .avatar { background: linear-gradient(180deg, #ffd66b, #f0b90b); animation: legendPulse 1.5s infinite alternate; }
   @keyframes legendPulse {
     0% { box-shadow: 0 0 15px #f0b90b; }
@@ -391,8 +366,6 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
     flex: 1;
     min-width: 160px;
     touch-action: manipulation;
@@ -400,24 +373,18 @@
   #spinBtn {
     background: linear-gradient(180deg, #f0b90b 0%, #b8860b 100%);
     color: #1a1408;
-    box-shadow: 
+    box-shadow:
       0 4px 0 #7a5a07,
       0 8px 25px rgba(240, 185, 11, 0.5),
       inset 0 2px 0 rgba(255,255,255,0.3);
     text-shadow: 0 1px 0 rgba(255,255,255,0.3);
   }
-  #spinBtn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 
-      0 6px 0 #7a5a07,
-      0 12px 35px rgba(240, 185, 11, 0.7),
-      inset 0 2px 0 rgba(255,255,255,0.3);
-  }
+  #spinBtn:hover:not(:disabled) { transform: translateY(-2px); }
   #spinBtn:active:not(:disabled) {
     transform: translateY(2px);
     box-shadow: 0 2px 0 #7a5a07, 0 4px 15px rgba(240, 185, 11, 0.5);
   }
-  #spinBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  #spinBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   #resetBtn {
     background: linear-gradient(180deg, #2a3550 0%, #1a2338 100%);
@@ -427,7 +394,6 @@
     min-width: 130px;
   }
   #resetBtn:hover:not(:disabled) { transform: translateY(-2px); background: linear-gradient(180deg, #354565, #232f4a); color: #b0c4e8; }
-  #resetBtn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #0d1522; }
 
   /* ===== БАТТЛ РЕЗУЛЬТАТ ===== */
   .battle-result {
@@ -479,7 +445,7 @@
     letter-spacing: 0.5px;
   }
   .legend span { display: flex; align-items: center; gap: 5px; }
-  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; box-shadow: 0 0 6px currentColor; }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 
   /* ===== ЭФФЕКТЫ ===== */
   .flash-overlay {
@@ -509,7 +475,7 @@
       --item-w: 105px;
       --roulette-h: 115px;
     }
-    h1 { font-size: 1.5em; letter-spacing: 1px; }
+    h1 { font-size: 1.4em; letter-spacing: 1px; }
     .cases-row { gap: 30px; margin: 10px 0 15px; min-height: 100px; }
     .case { width: 85px; height: 85px; }
     .case.opening .case-lid { transform: translateY(-60px) rotateX(-120deg); }
@@ -535,7 +501,6 @@
   <div class="subtitle">⚔ Case Battle ⚔</div>
 </div>
 
-<!-- КЕЙСЫ -->
 <div class="cases-row" id="casesRow">
   <div class="case" id="case1">
     <div class="case-lid"></div>
@@ -549,7 +514,6 @@
   </div>
 </div>
 
-<!-- АРЕНА -->
 <div class="battle-arena" id="battleArena">
   <div class="player-side">
     <div class="player-title p1">Игрок 1</div>
@@ -591,11 +555,11 @@
 </div>
 
 <div class="legend">
-  <span><i style="background:#8a99b8;color:#8a99b8"></i>Обычный</span>
-  <span><i style="background:#4d9be6;color:#4d9be6"></i>Необычный</span>
-  <span><i style="background:#8855ff;color:#8855ff"></i>Редкий</span>
-  <span><i style="background:#e64db8;color:#e64db8"></i>Эпический</span>
-  <span><i style="background:#f0b90b;color:#f0b90b"></i>Легендарный</span>
+  <span><i style="background:#8a99b8"></i>Обычный</span>
+  <span><i style="background:#4d9be6"></i>Необычный</span>
+  <span><i style="background:#8855ff"></i>Редкий</span>
+  <span><i style="background:#e64db8"></i>Эпический</span>
+  <span><i style="background:#f0b90b"></i>Легендарный</span>
 </div>
 
 <div class="flash-overlay" id="flashOverlay"></div>
@@ -655,4 +619,327 @@ function initials(name) {
 }
 
 function makeItem(person) {
-  const el = document
+  const el = document.createElement("div");
+  el.className = `item rar-${person.rarity}`;
+  el.innerHTML = `
+    <div class="avatar">${initials(person.name)}</div>
+    <div class="name">${person.name}</div>
+  `;
+  return el;
+}
+
+// ===== ЗВУК (Web Audio API) =====
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) { return null; }
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTick(volume = 0.08) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(900 + Math.random() * 300, ctx.currentTime);
+  gain.gain.setValueAtTime(volume, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.05);
+}
+
+function playCaseOpen() {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(200, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(60, ctx.currentTime + 0.5);
+  gain.gain.setValueAtTime(0.15, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.5);
+}
+
+function playFanfare() {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const notes = [523, 659, 784, 1047]; // C E G C
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+    gain.gain.setValueAtTime(0.12, ctx.currentTime + i * 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.4);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(ctx.currentTime + i * 0.12);
+    osc.stop(ctx.currentTime + i * 0.12 + 0.4);
+  });
+}
+
+// Планируем серию тиков с замедлением
+function scheduleTicks(duration = 6000) {
+  const startTime = performance.now();
+  let lastTick = 0;
+  function tick() {
+    const elapsed = performance.now() - startTime;
+    if (elapsed >= duration) return;
+    // Интервал увеличивается к концу (замедление)
+    const progress = elapsed / duration;
+    const interval = 40 + progress * progress * 250;
+    if (elapsed - lastTick >= interval) {
+      playTick(0.06);
+      lastTick = elapsed;
+    }
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+const inner1 = document.getElementById("inner1");
+const inner2 = document.getElementById("inner2");
+const roulette1 = document.getElementById("roulette1");
+const roulette2 = document.getElementById("roulette2");
+const marker1 = document.getElementById("marker1");
+const marker2 = document.getElementById("marker2");
+const spinBtn = document.getElementById("spinBtn");
+const resetBtn = document.getElementById("resetBtn");
+const result1 = document.getElementById("result1");
+const result2 = document.getElementById("result2");
+const battleResult = document.getElementById("battleResult");
+const flashOverlay = document.getElementById("flashOverlay");
+const battleArena = document.getElementById("battleArena");
+const case1 = document.getElementById("case1");
+const case2 = document.getElementById("case2");
+
+let spinning = false;
+let totalOpens = 0;
+let totalLegend = 0;
+let wins1 = 0;
+let wins2 = 0;
+
+function getItemWidth() {
+  return window.innerWidth <= 768 ? 105 : 130;
+}
+
+function buildStrip(innerEl, count = 60) {
+  innerEl.innerHTML = "";
+  innerEl.style.transition = "none";
+  innerEl.style.transform = "translateX(0)";
+  for (let i = 0; i < count; i++) {
+    innerEl.appendChild(makeItem(pickWeighted()));
+  }
+}
+
+function createConfetti(isLegendary = false) {
+  const colors = isLegendary
+    ? ['#f0b90b', '#ffd66b', '#fff', '#f0b90b']
+    : ['#f0b90b', '#e64db8', '#4d9be6', '#e64db8', '#8855ff', '#8a99b8'];
+  const count = isLegendary ? 100 : 40;
+  for (let i = 0; i < count; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.left = Math.random() * 100 + 'vw';
+    conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    conf.style.width = (Math.random() * 6 + 4) + 'px';
+    conf.style.height = (Math.random() * 10 + 6) + 'px';
+    conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
+    conf.style.animationDelay = Math.random() * 0.5 + 's';
+    conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 4500);
+  }
+}
+
+function triggerFlash() {
+  flashOverlay.classList.add('active');
+  setTimeout(() => flashOverlay.classList.remove('active'), 800);
+}
+
+// ===== ОСНОВНАЯ ЛОГИКА =====
+spinBtn.addEventListener("click", () => {
+  if (spinning) return;
+  spinning = true;
+  spinBtn.disabled = true;
+
+  // Сброс
+  result1.classList.remove("show", "winning", "losing");
+  result2.classList.remove("show", "winning", "losing");
+  battleResult.classList.remove("show");
+  result1.innerHTML = "";
+  result2.innerHTML = "";
+  battleResult.innerHTML = "";
+
+  // Анимация кейсов
+  case1.classList.add("shaking");
+  case2.classList.add("shaking");
+  playCaseOpen();
+
+  setTimeout(() => {
+    case1.classList.remove("shaking");
+    case2.classList.remove("shaking");
+    case1.classList.add("opening");
+    case2.classList.add("opening");
+
+    // Показываем арену
+    battleArena.classList.add("active");
+
+    setTimeout(() => {
+      // Запуск рулеток
+      startSpin();
+    }, 500);
+  }, 800);
+});
+
+function startSpin() {
+  const winner1 = pickWeighted();
+  const winner2 = pickWeighted();
+
+  const STRIP_LEN = 60;
+  const ITEM_W = getItemWidth();
+
+  buildStrip(inner1, STRIP_LEN);
+  buildStrip(inner2, STRIP_LEN);
+
+  const WIN_INDEX = 50;
+
+  const el1 = makeItem(winner1);
+  el1.classList.add("winner");
+  inner1.children[WIN_INDEX].replaceWith(el1);
+
+  const el2 = makeItem(winner2);
+  el2.classList.add("winner");
+  inner2.children[WIN_INDEX].replaceWith(el2);
+
+  function calcTarget(innerEl) {
+    const containerW = innerEl.parentElement.clientWidth;
+    const jitter = (Math.random() - 0.5) * (ITEM_W * 0.5);
+    return -(WIN_INDEX * ITEM_W) + (containerW / 2) - (ITEM_W / 2) + jitter;
+  }
+
+  marker1.classList.add("pulse");
+  marker2.classList.add("pulse");
+  roulette1.classList.add("spinning");
+  roulette2.classList.add("spinning");
+
+  // Звук прокрутки
+  scheduleTicks(6000);
+
+  void inner1.offsetWidth;
+  void inner2.offsetWidth;
+
+  inner1.style.transition = "transform 6s cubic-bezier(0.08, 0.75, 0.15, 1)";
+  inner1.style.transform = `translateX(${calcTarget(inner1)}px)`;
+
+  inner2.style.transition = "transform 6s cubic-bezier(0.08, 0.75, 0.15, 1)";
+  inner2.style.transform = `translateX(${calcTarget(inner2)}px)`;
+
+  setTimeout(() => {
+    spinning = false;
+    spinBtn.disabled = false;
+    marker1.classList.remove("pulse");
+    marker2.classList.remove("pulse");
+    roulette1.classList.remove("spinning");
+    roulette2.classList.remove("spinning");
+
+    totalOpens++;
+    if (winner1.rarity === "legendary" || winner2.rarity === "legendary") {
+      totalLegend++;
+      triggerFlash();
+      createConfetti(true);
+      playFanfare();
+    } else {
+      createConfetti(false);
+    }
+
+    let battleText = "";
+    let isDraw = false;
+    if (winner1.value > winner2.value) {
+      wins1++;
+      battleText = "🏆 Победа Игрока 1!";
+      result1.classList.add("winning");
+      result2.classList.add("losing");
+    } else if (winner2.value > winner1.value) {
+      wins2++;
+      battleText = "🏆 Победа Игрока 2!";
+      result2.classList.add("winning");
+      result1.classList.add("losing");
+    } else);
+ {
+      isDraw = true;
+      battleText = "🤝 Ничья!";
+      result   1.classList.add("winning");
+      result build2.classList.add("winning");
+   Strip }
+
+    updateStats();
+
+    result1.innerHTML( = `
+      <div class="rarityinner-label" style="color:2${COLOR_MAP[winner,1.rarity]}">${ RARITY_LAB20EL[winner1.rarity]}</div);
+>
+      <div class="highlight" style ="color:${COLOR_MAP[winner }
+1.rarity]}">${winner1});
+
+.name}</div>
+    `;
+    result//1.classList.add("show");
+
+    result2 Ста.innerHTML = `
+      <div class="rarity-label" styleр="color:${COLOR_MAP[winnerт2.rarity]}">${RARITY_LABEL[winner2.rarity]}</div>
+      <div class="highlight" style="color:${COLOR_MAP[winner2.rarity]}">${winner2.name}</div>
+    `;
+    result2.classList.add("show");
+
+    battleResult.textContent = battleText;
+    battleResult.style.color = isDraw ? "#5a6b8c" : "#f0b90b";
+    battleResult.classList.add("show");
+
+    case1.classList.remove("opening");
+    case2.classList.remove("opening");
+  }, 6100);
+}
+
+resetBtn.addEventListener("click", () => {
+  if (spinning) return;
+  buildStrip(inner1, 20);
+  buildStrip(inner2, 20);
+  result1.classList.remove("show", "winning", "losing");
+  result2.classList.remove("show", "winning", "losing");
+  battleResult.classList.remove("show");
+  result1.innerHTML = "";
+  result2.innerHTML = "";
+  battleResult.innerHTML = "";
+  battleArena.classList.remove("active");
+  case1.classList.remove("opening", "shaking");
+  case2.classList.remove("opening", "shaking");
+});
+
+function updateStats() {
+  document.getElementById("statOpens").textContent = totalOpens;
+  document.getElementById("statLegend").textContent = totalLegend;
+  document.getElementById("statW1").textContent = wins1;
+  document.getElementById("statW2").textContent = wins2;
+}
+
+window.addEventListener("resize", () => {
+  if (!spinning && !battleArena.classList.contains("active")) {
+    buildStrip(inner1, 20
+buildStrip(inner1, 20);
+buildStrip(inner2, 20);
+</script>
+
+</body>
+</html>
